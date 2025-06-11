@@ -20,6 +20,9 @@ if 'search_results' not in st.session_state:
 if 'selected_video_id' not in st.session_state:
     st.session_state['selected_video_id'] = None
 
+SEARCH_VIDEOS_URL = st.secrets["api"]["search_videos"]
+SCRAPE_COMMENTS_URL = st.secrets["api"]["scrape_comments"]
+
 if st.button("Cari Video"):
     if not query:
         st.warning("Masukkan kata kunci pencarian!")
@@ -27,7 +30,7 @@ if st.button("Cari Video"):
         with st.spinner("Mencari video..."):
             try:
                 resp = requests.post(
-                    "http://localhost:5000/search_videos",
+                    SEARCH_VIDEOS_URL,
                     json={"query": query},
                     timeout=60
                 )
@@ -64,7 +67,7 @@ if selected_video_id:
     with st.spinner("Mengambil detail & komentar..."):
         try:
             response = requests.post(
-                "http://localhost:5000/scrape_comments",
+                SCRAPE_COMMENTS_URL,
                 json={"video_url": video_url},
                 timeout=120
             )
